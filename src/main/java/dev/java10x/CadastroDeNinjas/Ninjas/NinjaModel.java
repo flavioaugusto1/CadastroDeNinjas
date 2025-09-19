@@ -31,6 +31,6 @@ public class NinjaModel {
 
     @ManyToOne()
     @JoinColumn(name = "missoes_id")
-    private MissoesModel missao;
+    private MissoesModel missoes;
 
 }
