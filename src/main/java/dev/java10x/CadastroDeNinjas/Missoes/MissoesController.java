@@ -24,6 +24,11 @@ public class MissoesController {
         return missoesService.listarMissoes();
     }
 
+    @GetMapping("/listar/{id}")
+    public MissoesModel listarMissaoPorId(@PathVariable Long id){
+        return missoesService.listarMissaoPorId(id);
+    }
+
     @PutMapping("/atualizar")
     public String atualizarMissao(){
         return "Missão atualizada";
