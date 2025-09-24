@@ -14,6 +14,10 @@ public class NinjaService {
         this.ninjasRepository = ninjasRepository;
     }
 
+    public NinjaModel cadastraNinja(NinjaModel ninja){
+        return ninjasRepository.save(ninja);
+    }
+
     public List<NinjaModel> listarNinjas(){
         return ninjasRepository.findAll();
     }
