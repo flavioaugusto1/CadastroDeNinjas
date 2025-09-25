@@ -25,4 +25,12 @@ public class MissoesService {
         Optional<MissoesModel> missaoPorId = missoesRepository.findById(id);
         return missaoPorId.orElse(null);
     }
+
+    public void deletarMissao(Long id){
+        Optional<MissoesModel> missaoPorId = missoesRepository.findById(id);
+
+        if(missaoPorId.isPresent()){
+            missoesRepository.deleteById(id);
+        }
+    }
 }
