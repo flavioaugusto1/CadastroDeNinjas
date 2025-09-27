@@ -15,7 +15,7 @@ public class MissoesController {
     }
 
     @PostMapping("/cadastrar")
-    public MissoesModel criarMissao(@RequestBody MissoesModel missao){
+    public MissoesDTO criarMissao(@RequestBody MissoesDTO missao){
         return missoesService.criaMissao(missao);
     }
 
