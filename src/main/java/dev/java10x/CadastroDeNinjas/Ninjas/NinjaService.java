@@ -4,34 +4,49 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class NinjaService {
 
     private NinjasRepository ninjasRepository;
+    private NinjaMapper ninjaMapper;
 
-    public NinjaService(NinjasRepository ninjasRepository) {
+    public NinjaService(NinjasRepository ninjasRepository, NinjaMapper ninjaMapper) {
         this.ninjasRepository = ninjasRepository;
+        this.ninjaMapper = ninjaMapper;
     }
 
-    public NinjaModel cadastraNinja(NinjaModel ninja){
-        return ninjasRepository.save(ninja);
+    public NinjaDTO cadastraNinja(NinjaDTO ninjaDTO){
+        NinjaModel ninja = ninjaMapper.map(ninjaDTO);
+        ninja = ninjasRepository.save(ninja);
+        return ninjaMapper.map(ninja);
     }
 
-    public List<NinjaModel> listarNinjas(){
-        return ninjasRepository.findAll();
+    public List<NinjaDTO> listarNinjas(){
+       List<NinjaModel> ninjas = ninjasRepository.findAll();
+       return ninjas.stream()
+               .map(ninjaMapper::map)
+               .collect(Collectors.toList());
+
     }
 
-    public NinjaModel listarNinjaPorID(Long id){
+    public NinjaDTO listarNinjaPorID(Long id){
         Optional<NinjaModel> ninjaPorId = ninjasRepository.findById(id);
-        return ninjaPorId.orElse(null);
+        return ninjaPorId.map(ninjaMapper::map).orElse(null);
     }
 
-    public NinjaModel atualizarNinja(Long id, NinjaModel ninjaAtualizado){
-        if (ninjasRepository.existsById(id)){
+    public NinjaDTO atualizarNinja(Long id, NinjaDTO ninjaDTO){
+        Optional<NinjaModel> ninjaExistente = ninjasRepository.findById(id);
+
+        if(ninjaExistente.isPresent()){
+            NinjaModel ninjaAtualizado = ninjaMapper.map(ninjaDTO);
             ninjaAtualizado.setId(id);
-            return ninjasRepository.save(ninjaAtualizado);
+            NinjaModel ninjaSalvo = ninjasRepository.save(ninjaAtualizado);
+
+            return  ninjaMapper.map(ninjaSalvo);
         }
+
         return null;
     }
 
